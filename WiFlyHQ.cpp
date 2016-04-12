@@ -2533,7 +2533,7 @@ boolean WiFly::createAdhocNetwork(const char *ssid, uint8_t channel)
  * @retval true - success, the connection is open
  * @retval false - failed, or connection already in progress
  */
-boolean WiFly::open(const char *addr, uint16_t port, boolean block)
+boolean WiFly::open(const char *addr, uint16_t port, boolean block, uint16_t timeout)
 {
     char buf[20];
     char ch;
@@ -2573,7 +2573,7 @@ boolean WiFly::open(const char *addr, uint16_t port, boolean block)
 
     /* Expect "*OPEN*" or "Connect FAILED" */
 
-    while (readTimeout(&ch,10000)) {
+    while (readTimeout(&ch,timeout)) {
         switch (ch) {
         case '*':
             if (match_P(PSTR("OPEN*"))) {
@@ -2622,10 +2622,10 @@ boolean WiFly::open(const char *addr, uint16_t port, boolean block)
  * @retval true - success, the connection is open
  * @retval false - failed, or connection already in progress
  */
-boolean WiFly::open(IPAddress addr, uint16_t port, boolean block)
+boolean WiFly::open(IPAddress addr, uint16_t port, boolean block, uint16_t timeout)
 {
     char buf[16];
-    return open(iptoa(addr, buf, sizeof(buf)), port, block);
+    return open(iptoa(addr, buf, sizeof(buf)), port, block, timeout);
 }
 
 /**
