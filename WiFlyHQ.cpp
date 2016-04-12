@@ -770,9 +770,9 @@ boolean WiFly::readTimeout(char *chp, uint16_t timeout)
             if (isprint(ch)) {
                 DPRINT(' ');
                 DPRINT(ch);
-            } else if(ch=="\r") {
+            } else if(ch=='\r') {
                 DPRINT(" \\r");
-            } else if(ch=="\n") {
+            } else if(ch=='\n') {
                 DPRINT(" \\n");
             }
             DPRINTLN();
