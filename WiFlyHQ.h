@@ -292,7 +292,6 @@ public:
     void dbgBegin(int size=256);
     void dbgDump();
     void dbgEnd();
-    boolean debugOn;
 
     boolean match(const char *str, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
     boolean match(const __FlashStringHelper *str, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
