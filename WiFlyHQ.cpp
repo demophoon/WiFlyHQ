@@ -1127,11 +1127,7 @@ boolean WiFly::exitCommandMode()
         inCommandMode = false;
         return true;
     } else {
-<<<<<<< HEAD
         DPRINTLN(F("Failed to exit\n\r"));
-=======
-        debug.println(F("Failed to exit\r\n"));
->>>>>>> a662e1a19a9c6988db8c75bfe0752c90581445a1
         return false;
     }
 }
