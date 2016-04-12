@@ -119,7 +119,8 @@ typedef const char PROGMEM prog_char;
 #define WIFLY_DEFAULT_TIMEOUT    500    /* 500 milliseconds */
 
 #define WIFLY_MODE_WPA           0    
-#define WIFLY_MODE_WEP           1
+#define WIFLY_MODE_WEP_128       1
+#define WIFLY_MODE_WEP_64        2
 
 class WFDebug : public Stream {
 public:
@@ -186,6 +187,7 @@ public:
     boolean setGateway(const char *buf);
     boolean setDNS(const char *buf);
     boolean setChannel(uint8_t channel);
+    boolean setAuth(uint8_t mode);
     boolean setKey(const char *buf);
     boolean setPassphrase(const char *buf);
     boolean setSpaceReplace(char ch);
@@ -261,8 +263,8 @@ public:
     void enableHostRestore();
     void disableHostRestore();
 
-    boolean open(const char *addr, uint16_t port=80, boolean block=true);
-    boolean open(IPAddress addr, uint16_t port=80, boolean block=true);
+    boolean open(const char *addr, uint16_t port=80, boolean block=true, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
+    boolean open(IPAddress addr, uint16_t port=80, boolean block=true, uint16_t timeout=WIFLY_DEFAULT_TIMEOUT);
     boolean close();
     boolean openComplete();
     boolean isConnected();

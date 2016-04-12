@@ -2074,6 +2074,12 @@ boolean WiFly::setChannel(uint8_t channel)
     return setopt(PSTR("set wlan chan"), channel);
 }
 
+/** Set auth mode, normally leave as 0, but wep64 requires 8 */
+boolean WiFly::setAuth(uint8_t mode)
+{
+    return setopt(PSTR("set wlan auth"), mode);
+}
+
 /** Set WEP key */
 boolean WiFly::setKey(const char *buf)
 {
@@ -2312,7 +2318,11 @@ boolean WiFly::join(const char *ssid, const char *password, bool dhcp, uint8_t m
     setSSID(ssid);
     if (mode == WIFLY_MODE_WPA) {
         setPassphrase(password);
-    } else {
+    } else if(mode == WIFLY_MODE_WEP_64) {
+        setAuth(8);
+        setKey(password);
+    } else { //wep 128 or unknown
+        setAuth(0);
         setKey(password);
     }
 
@@ -2523,7 +2533,7 @@ boolean WiFly::createAdhocNetwork(const char *ssid, uint8_t channel)
  * @retval true - success, the connection is open
  * @retval false - failed, or connection already in progress
  */
-boolean WiFly::open(const char *addr, uint16_t port, boolean block)
+boolean WiFly::open(const char *addr, uint16_t port, boolean block, uint16_t timeout)
 {
     char buf[20];
     char ch;
@@ -2563,7 +2573,7 @@ boolean WiFly::open(const char *addr, uint16_t port, boolean block)
 
     /* Expect "*OPEN*" or "Connect FAILED" */
 
-    while (readTimeout(&ch,10000)) {
+    while (readTimeout(&ch,timeout)) {
         switch (ch) {
         case '*':
             if (match_P(PSTR("OPEN*"))) {
@@ -2612,10 +2622,10 @@ boolean WiFly::open(const char *addr, uint16_t port, boolean block)
  * @retval true - success, the connection is open
  * @retval false - failed, or connection already in progress
  */
-boolean WiFly::open(IPAddress addr, uint16_t port, boolean block)
+boolean WiFly::open(IPAddress addr, uint16_t port, boolean block, uint16_t timeout)
 {
     char buf[16];
-    return open(iptoa(addr, buf, sizeof(buf)), port, block);
+    return open(iptoa(addr, buf, sizeof(buf)), port, block, timeout);
 }
 
 /**
